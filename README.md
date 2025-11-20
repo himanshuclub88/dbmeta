@@ -166,13 +166,13 @@ Your modified constructor:
 ```python
 from dbmeta import FolderDB
 
-db = FolderDB(base_path="batch_logs", base_metadeta="metadata.json")
+db = FolderDB(base_path="batch_logs", base_metadata="metadata.json")
 ```
 
 To use a custom metadata filename:
 
 ```python
-db = FolderDB("batch_logs", base_metadeta="job_metadata.json")
+db = FolderDB("batch_logs", base_metadata="job_metadata.json")
 ```
 
 DbMeta ignores all other files.
@@ -324,7 +324,7 @@ GROUP BY day
 
 # 🔒 File Ignoring Behavior
 
-DbMeta **only reads** the metadata file specified by `base_metadeta`.
+DbMeta **only reads** the metadata file specified by `base_metadata`.
 
 Ignored files in job folders:
 
@@ -344,7 +344,7 @@ DbMeta remains stable even in noisy production folders.
 # 🧱 Architecture Diagram
 
 ```
-FolderDB(base_path, base_metadeta)
+FolderDB(base_path, base_metadata)
  ├── Scan all job folders
  ├── Read ONLY metadata.json
  ├── Auto-generate tables (one per top-level key)
