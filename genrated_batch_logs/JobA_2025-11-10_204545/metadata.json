@@ -1,0 +1,15 @@
+{
+    "execution_info": {
+        "start_time": "2025-11-10T20:45:45Z",
+        "status": "SUCCESS",
+        "duration_sec": 497
+    },
+    "stats": {
+        "rows_in": 852720,
+        "rows_out": 851184
+    },
+    "inputs": {
+        "files_read": 24,
+        "source": "landing/finance/"
+    }
+}
