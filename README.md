@@ -1,6 +1,6 @@
 ---
 
-# 📘 MiniDB — A Pure Python Metadata Database Engine
+# 📘 DbMeta — A Pure Python Metadata Database Engine
 
 ### Query Batch Job Metadata Using SQL + Python, Directly From Folder Structures
 
@@ -8,7 +8,7 @@
 
 # 🌟 Overview
 
-**MiniDB** is a pure Python, zero-dependency engine designed specifically for **reading and analyzing batch job metadata** stored in folder structures.
+**DbMeta** is a pure Python, zero-dependency engine designed specifically for **reading and analyzing batch job metadata** stored in folder structures.
 It automatically detects `metadata.json` files inside job-run folders, extracts structured metadata, and turns them into **queryable database tables**.
 
 You get:
@@ -24,7 +24,7 @@ You get:
 * **Multi-day consolidation**
 * **Metadata-only reading (all other files ignored)**
 
-MiniDB turns this:
+DbMeta turns this:
 
 ```
 batch_logs/
@@ -51,7 +51,7 @@ Each table contains rows from **all days**, merged automatically.
 
 ---
 
-# 🏭 Why MiniDB? (Real-World Metadata Motivation)
+# 🏭 Why DbMeta? (Real-World Metadata Motivation)
 
 Batch systems (Airflow, Azure Data Factory, Informatica, TWS, Autosys, Databricks) create new metadata every time a job runs:
 
@@ -82,9 +82,9 @@ Over time, metadata folders grow:
 * across many days
 * across many environments
 
-### ❗ Pain Points Solved by MiniDB
+### ❗ Pain Points Solved by DbMeta
 
-| Problem                                                 | MiniDB Solution                         |
+| Problem                                                 | DbMeta Solution                         |
 | ------------------------------------------------------- | --------------------------------------- |
 | Metadata scattered across folders                       | Auto-detects all `metadata.json`        |
 | Tons of irrelevant files (`*.log`, `*.txt`, other JSON) | Ignores everything except metadata.json |
@@ -97,7 +97,7 @@ Over time, metadata folders grow:
 
 # 📁 Metadata Folder Structure
 
-MiniDB expects a structure like:
+DbMeta expects a structure like:
 
 ```
 batch_logs/
@@ -113,7 +113,7 @@ batch_logs/
 Inside each folder:
 
 ```
-metadata.json  ← MiniDB reads ONLY this file
+metadata.json  ← DbMeta reads ONLY this file
 execution.log  ← ignored
 error.txt      ← ignored
 debug.json     ← ignored
@@ -143,7 +143,7 @@ debug.json     ← ignored
 }
 ```
 
-MiniDB auto-creates 3 tables:
+DbMeta auto-creates 3 tables:
 
 ```
 db.execution_info
@@ -159,12 +159,12 @@ iid = folder name (e.g., JobA_20240201_000101)
 
 ---
 
-# ⚙️ Instantiating MiniDB
+# ⚙️ Instantiating DbMeta
 
 Your modified constructor:
 
 ```python
-from minibd import FolderDB
+from bdmeta import FolderDB
 
 db = FolderDB(base_path="batch_logs", base_metadeta="metadata.json")
 ```
@@ -175,7 +175,7 @@ To use a custom metadata filename:
 db = FolderDB("batch_logs", base_metadeta="job_metadata.json")
 ```
 
-MiniDB ignores all other files.
+DbMeta ignores all other files.
 
 ---
 
@@ -193,7 +193,7 @@ batch_logs/
  │     └── metadata.json
 ```
 
-MiniDB automatically merges them into unified tables.
+DbMeta automatically merges them into unified tables.
 
 ### ✔ execution_info table:
 
@@ -219,7 +219,7 @@ MiniDB automatically merges them into unified tables.
 | 2024-02-02_JobA | 10         | landing/finance/ |
 | 2024-02-03_JobA | 22         | landing/finance/ |
 
-This automatic consolidation requires **no extra code** — MiniDB handles it.
+This automatic consolidation requires **no extra code** — DbMeta handles it.
 
 ---
 
@@ -236,6 +236,15 @@ db.execution_info.where(
     ("status", "=", "FAILED"),
     ("duration_sec", ">", 300)
 ).show()
+```
+
+## Select
+
+```python
+db.execution_info\
+    .select('duration_sec','start_time','status')\
+    .where(("status", "=", "FAILED"))\
+    .show()
 ```
 
 ## JOIN example
@@ -315,7 +324,7 @@ GROUP BY day
 
 # 🔒 File Ignoring Behavior
 
-MiniDB **only reads** the metadata file specified by `base_metadeta`.
+DbMeta **only reads** the metadata file specified by `base_metadeta`.
 
 Ignored files in job folders:
 
@@ -328,7 +337,7 @@ Ignored files in job folders:
 | `temp/`                 | ✔        |
 | `*.tmp`                 | ✔        |
 
-MiniDB remains stable even in noisy production folders.
+DbMeta remains stable even in noisy production folders.
 
 ---
 
@@ -376,7 +385,7 @@ Planned features:
 
 # 🏁 Conclusion
 
-MiniDB turns **folders of batch metadata** into a **queryable lightweight database**, without:
+DbMeta turns **folders of batch metadata** into a **queryable lightweight database**, without:
 
 * Hive
 * Spark
@@ -401,6 +410,4 @@ Perfect for:
 * Debugging historical job runs
 * Metadata lineage exploration
 
----# metadb
-# dbmeta
-# dbmeta
+---

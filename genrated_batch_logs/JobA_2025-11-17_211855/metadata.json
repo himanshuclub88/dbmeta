@@ -1,12 +1,12 @@
 {
     "execution_info": {
-        "start_time": "2025-11-18T20:45:45Z",
+        "start_time": "2025-11-17T21:18:55",
         "status": "SUCCESS",
-        "duration_sec": 1075
+        "duration_sec": 763
     },
     "stats": {
-        "rows_in": 689823,
-        "rows_out": 688723
+        "rows_in": 749538,
+        "rows_out": 748399
     },
     "inputs": {
         "files_read": 6,

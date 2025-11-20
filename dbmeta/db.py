@@ -12,28 +12,30 @@ class TableQuery:
         return self.rows
     
     def show(self):
+        rows = self.rows
         print()
-        rows=self.rows
         if not rows:
             print("(empty)")
             return
-
-        # extract columns
         cols = sorted({k for row in rows for k in row.keys()})
-
-        # compute column widths
         widths = {col: max(len(col), max(len(str(row.get(col, ""))) for row in rows))
-                for col in cols}
+                    for col in cols}
+        separator = "+" + "+".join("-" * (widths[col] + 2) for col in cols) + "+"
+        print(separator)
+        header_line = "| " + " | ".join(col.ljust(widths[col]) for col in cols) + " |"
+        print(header_line)
+        print(separator)
 
-        # print header
-        header = " | ".join(col.ljust(widths[col]) for col in cols)
-        print(header)
-        print("-" * len(header))
 
-        # print rows
         for row in rows:
-            line = " | ".join(str(row.get(col, "")).ljust(widths[col]) for col in cols)
+            line = "| " + " | ".join(
+                str(row.get(col, "")).ljust(widths[col]) 
+                for col in cols
+            ) + " |"
             print(line)
+
+        print(separator)
+
 
 
     def where(self, *conditions):
@@ -69,6 +71,16 @@ class TableQuery:
         return TableQuery([r for r in self.rows if check(r)])
 
     def select(self, *cols):
+        if '*' in cols:
+            return TableQuery(self.rows)
+        available_cols = set().union(*(r.keys() for r in self.rows)) if self.rows else set()
+        requested_cols = set(cols)
+        invalid_cols = requested_cols - available_cols
+        if invalid_cols:
+            raise ValueError(
+                f"Invalid column name(s) requested: {', '.join(sorted(invalid_cols))}. "
+                f"Available columns are: {', '.join(sorted(available_cols))}"
+            )
         return TableQuery([{c: r.get(c) for c in cols} for r in self.rows])
 
     def order_by(self, col, desc=False):
