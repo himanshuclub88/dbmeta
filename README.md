@@ -164,7 +164,7 @@ iid = folder name (e.g., JobA_20240201_000101)
 Your modified constructor:
 
 ```python
-from bdmeta import FolderDB
+from dbmeta import FolderDB
 
 db = FolderDB(base_path="batch_logs", base_metadeta="metadata.json")
 ```
