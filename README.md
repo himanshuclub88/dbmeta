@@ -292,10 +292,10 @@ WHERE status = 'FAILED'
 
 ```sql
 db.sql("""
-SELECT e.iid, e.status, s.rows_in, i.files_read
-FROM execution_info e
-JOIN stats s USING(iid)
-JOIN inputs i USING(iid)
+SELECT iid, status, rows_in, files_read
+FROM execution_info 
+JOIN stats USING(iid)
+JOIN inputs USING(iid)
 """).show()
 ```
 
