@@ -373,9 +373,8 @@ SQLParserAdvanced Engine
 
 Planned features:
 
-* CREATE TABLE + INSERT via SQL
 * DISTINCT
-* Column qualification (`e.status`)
+* Column qualification (`e.status`) not support
 * Subquery support
 * Query optimizer
 * Parquet/CSV export
